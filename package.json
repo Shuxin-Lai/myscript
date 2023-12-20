@@ -1,0 +1,27 @@
+{
+  "bin": {
+    "mydate": "./commands/mydate.js",
+    "mysort": "./commands/mysort.js",
+    "myana": "./commands/myana.js"
+  },
+  "name": "myscript",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "compress-images": "^2.0.5",
+    "dayjs": "^1.11.10",
+    "glob": "^10.3.10",
+    "image-size": "^1.0.2",
+    "lodash": "^4.17.21",
+    "minimist": "^1.2.8",
+    "pngquant-bin": "6.0.1",
+    "sharp": "^0.32.6",
+    "sort-object": "^3.0.3"
+  }
+}
