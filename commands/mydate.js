@@ -15,8 +15,9 @@ function main() {
 
   const format = argv.f || 'YYYY-MM-DD HH:mm:ss'
   const date = argv.d || argv._[0] || Date.now()
-  const res = dayjs(date).format(format)
-  console.log(res)
+  const day = dayjs(date)
+  const res = day.format(format)
+  console.log(`${day.valueOf()}\n${res}`)
 }
 
 main()

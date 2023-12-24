@@ -1,3 +1,4 @@
+const { isString, isObject, isFunction } = require('lodash')
 const minimist = require('minimist')
 
 function getArgv(alias = {}) {
@@ -9,10 +10,22 @@ function getArgv(alias = {}) {
   const argv = minimist(process.argv.slice(2))
   const values = {}
 
-  Object.entries(alias).forEach(([key, value]) => {
-    const input = argv[key] || argv[value]
-    values[key] = input
-    values[value] = input
+  Object.entries(alias).forEach(([short, longOrContextOrFn]) => {
+    let long = longOrContextOrFn
+    let defaultValue = null
+
+    if (isFunction(longOrContextOrFn)) {
+      const result = longOrContextOrFn(argv)
+      long = result.name
+      defaultValue = result.defaultValue
+    } else if (isObject(longOrContextOrFn)) {
+      long = longOrContextOrFn.name
+      defaultValue = longOrContextOrFn.defaultValue
+    }
+
+    const input = argv[short] ?? argv[long] ?? defaultValue
+    values[short] = input
+    values[long] = input
   })
 
   argv.__values = values

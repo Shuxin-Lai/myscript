@@ -5,6 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@tsmx/human-readable':
+    specifier: ^2.0.2
+    version: registry.npmmirror.com/@tsmx/human-readable@2.0.2
+  chalk:
+    specifier: ^5.3.0
+    version: registry.npmmirror.com/chalk@5.3.0
   compress-images:
     specifier: ^2.0.5
     version: registry.npmmirror.com/compress-images@2.0.5
@@ -70,6 +76,13 @@ packages:
     name: '@trysound/sax'
     version: 0.2.0
     engines: {node: '>=10.13.0'}
+    dev: false
+
+  registry.npmmirror.com/@tsmx/human-readable@2.0.2:
+    resolution: {integrity: sha512-KcIboIIHJsD/vVqb9YFRmAnmtZXlA+Qi9Qv0BCbk9TFAEr5hjpKkSUNfrS1LeGMY/UhKZrJldg7x3JNeyh2byQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@tsmx/human-readable/-/human-readable-2.0.2.tgz}
+    name: '@tsmx/human-readable'
+    version: 2.0.2
+    engines: {node: '>=14.0.0', npm: '>=6.0.0'}
     dev: false
 
   registry.npmmirror.com/@types/keyv@3.1.4:
@@ -415,6 +428,13 @@ packages:
       has-ansi: registry.npmmirror.com/has-ansi@2.0.0
       strip-ansi: registry.npmmirror.com/strip-ansi@3.0.1
       supports-color: registry.npmmirror.com/supports-color@2.0.0
+    dev: false
+
+  registry.npmmirror.com/chalk@5.3.0:
+    resolution: {integrity: sha512-dLitG79d+GV1Nb/VYcCDFivJeK1hiukt9QjRNVOsUtTy1rR1YJsmpGGTZ3qJos+uw7WmWF4wUwBd9jxjocFC2w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/chalk/-/chalk-5.3.0.tgz}
+    name: chalk
+    version: 5.3.0
+    engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
     dev: false
 
   registry.npmmirror.com/chownr@1.1.4:
