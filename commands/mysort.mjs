@@ -1,13 +1,19 @@
 #!/usr/bin/env node
 
-const sortObj = require('sort-object')
-const fs = require('fs')
-const path = require('path')
-const { globSync } = require('glob')
-const { getArgv } = require('../utils/parse_argv')
+import { createRequire } from 'module'
+import fs from 'fs'
+import path from 'path'
+import { getArgv } from '../utils/parse_argv.mjs'
+import { globSync } from 'glob'
+import sortObj from 'sort-object'
+
+const require = createRequire(import.meta.url)
 
 const argv = getArgv({
-  s: 'source',
+  s: argv => ({
+    name: 'source',
+    defaultValue: argv._[0],
+  }),
   t: 'target',
   r: 'replace',
 })

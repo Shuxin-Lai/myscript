@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 
-const sortObj = require('sort-object')
-const { getArgv } = require('../utils/parse_argv')
-const { countList } = require('../utils/core')
+import { getArgv } from '../utils/parse_argv.mjs'
+import { countList } from '../utils/core.mjs'
+import sortObj from 'sort-object'
 
 const argv = getArgv({
-  l: 'list',
+  l: argv => ({
+    name: 'list',
+    defaultValue: argv._[0] || '',
+  }),
 })
 
 function normalizeList(list) {
@@ -24,7 +27,7 @@ function main() {
     console.log('myana [LIST]')
   }
 
-  const list = argv.__values.l || argv._[0] || ''
+  const list = argv.__values.l
   const targetList = normalizeList(list)
   const result = sortObj(countList(targetList))
   console.log(JSON.stringify(result, null, 2))

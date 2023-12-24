@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const { getArgv } = require('../utils/parse_argv')
-const dayjs = require('dayjs')
+import { getArgv } from '../utils/parse_argv.mjs'
+import dayjs from 'dayjs'
 
 const argv = getArgv({
   d: 'date',

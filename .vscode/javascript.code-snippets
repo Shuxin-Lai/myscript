@@ -6,5 +6,12 @@
       "",
       "const { getArgv } = require('../utils/parse_argv')"
     ]
+  },
+  "crequire": {
+    "prefix": "crequire",
+    "body": [
+      "import { createRequire } from 'module'",
+      "const require = createRequire(import.meta.url)"
+    ]
   }
 }

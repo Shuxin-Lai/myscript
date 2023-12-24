@@ -1,7 +1,7 @@
-const { isString, isObject, isFunction } = require('lodash')
-const minimist = require('minimist')
+import { isObject, isFunction } from 'lodash-es'
+import minimist from 'minimist'
 
-function getArgv(alias = {}) {
+export function getArgv(alias = {}) {
   alias = {
     h: 'help',
 
@@ -30,8 +30,4 @@ function getArgv(alias = {}) {
 
   argv.__values = values
   return argv
-}
-
-module.exports = {
-  getArgv,
 }

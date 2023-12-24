@@ -3,13 +3,14 @@
 import chalk from 'chalk'
 
 import { createRequire } from 'module'
+
 const require = createRequire(import.meta.url)
 
 const hr = require('@tsmx/human-readable')
 const sharp = require('sharp')
 const path = require('path')
 const fs = require('fs')
-const { getArgv } = require('../utils/parse_argv')
+const { getArgv } = require('../utils/parse_argv.mjs')
 const { globSync } = require('glob')
 const { promisify } = require('util')
 const sizeOf = promisify(require('image-size'))

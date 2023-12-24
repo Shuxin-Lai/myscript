@@ -1,6 +1,6 @@
-const { isObject } = require('lodash')
+import { isObject } from 'lodash-es'
 
-function countList(list, keys = ['id', 'name']) {
+export function countList(list, keys = ['id', 'name']) {
   const map = {}
 
   list.forEach(item => {
@@ -14,8 +14,4 @@ function countList(list, keys = ['id', 'name']) {
   })
 
   return map
-}
-
-module.exports = {
-  countList,
 }

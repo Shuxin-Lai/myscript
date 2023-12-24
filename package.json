@@ -1,9 +1,10 @@
 {
   "bin": {
-    "mydate": "./commands/mydate.js",
-    "mysort": "./commands/mysort.js",
+    "mydate": "./commands/mydate.mjs",
+    "mysort": "./commands/mysort.mjs",
+    "mylang": "./commands/mylang.mjs",
     "mysharp": "./commands/mysharp.mjs",
-    "myana": "./commands/myana.js"
+    "myana": "./commands/myana.mjs"
   },
   "name": "myscript",
   "version": "1.0.0",
@@ -16,15 +17,19 @@
   "license": "ISC",
   "dependencies": {
     "@tsmx/human-readable": "^2.0.2",
+    "axios": "^1.6.2",
     "chalk": "^5.3.0",
     "compress-images": "^2.0.5",
     "dayjs": "^1.11.10",
     "glob": "^10.3.10",
     "image-size": "^1.0.2",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "minimist": "^1.2.8",
     "pngquant-bin": "6.0.1",
     "sharp": "^0.32.6",
     "sort-object": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.12"
   }
 }
