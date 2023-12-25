@@ -1,4 +1,6 @@
 import { isObject } from 'lodash-es'
+import path from 'path'
+import userhome from 'userhome'
 
 export function countList(list, keys = ['id', 'name']) {
   const map = {}
@@ -14,4 +16,16 @@ export function countList(list, keys = ['id', 'name']) {
   })
 
   return map
+}
+
+export function resolve(...paths) {
+  paths = paths.map(p => {
+    if (p.startsWith('~')) {
+      return userhome(p.slice(1))
+    }
+
+    return p
+  })
+
+  return path.resolve(...paths)
 }
