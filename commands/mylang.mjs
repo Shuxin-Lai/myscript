@@ -7,6 +7,9 @@ import path from 'path'
 import debug from 'debug'
 import { isString } from 'lodash-es'
 import fs from 'fs'
+import rootCheck from 'root-check'
+
+rootCheck()
 
 const require = createRequire(import.meta.url)
 const roles = require('../prompts/tongyi.json')

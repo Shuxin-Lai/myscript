@@ -13,5 +13,28 @@
       "import { createRequire } from 'module'",
       "const require = createRequire(import.meta.url)"
     ]
+  },
+  "ic": {
+    "prefix": "ic",
+    "body": [
+      "import { getContext } from '../utils/core.mjs'",
+      "",
+      "const { __name } = getContext(import.meta.url)",
+      "",
+      "/**",
+      " * @param {import('yargs').Argv} yargs",
+      " * @param {import('consola').Consola} consola",
+      " */",
+      "export default function (yargs, consola) {",
+      "\treturn yargs.command(",
+      "\t\t`${__name}`,",
+      "\t\t'',",
+      "\t\tyargs => yargs,",
+      "\t\targv => {}",
+      "\t)",
+      "}",
+      ""
+    ],
+    "description": "init command"
   }
 }

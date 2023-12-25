@@ -1,16 +1,12 @@
 #!/usr/bin/env node
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import { createRequire } from 'module'
 import path from 'path'
-import { fileURLToPath } from 'url'
 import { globSync } from 'glob'
 import consola from 'consola'
+import { getContext } from './utils/core.mjs'
 const argv = yargs(hideBin(process.argv)).argv
-
-const require = createRequire(import.meta.url)
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const { require, __dirname } = getContext(import.meta.url)
 
 const commands = globSync(path.resolve(__dirname, './commands_v2/*.mjs'))
 

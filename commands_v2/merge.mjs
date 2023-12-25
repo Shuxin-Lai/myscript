@@ -1,9 +1,11 @@
 import yargs from 'yargs'
 import fs from 'fs'
-import { resolve } from '../utils/core.mjs'
+import { getContext, resolve } from '../utils/core.mjs'
 import path from 'path'
 import { globSync } from 'glob'
 import { merge } from 'lodash-es'
+
+const { __name } = getContext(import.meta.url)
 
 function handle(sourceDir, outputDir, defaultFile) {
   const sourceFiles = globSync(path.resolve(sourceDir, '*.json'))
@@ -23,12 +25,12 @@ function handle(sourceDir, outputDir, defaultFile) {
 
 /**
  * @param { yargs } yargs
- * @param { import('consola').Consola } consola
+ * @param { import('consola').ConsolaInstance } consola
  */
 export default function (yargs, consola) {
   return yargs.command(
-    'merge [source] [default_file]',
-    'merge n files',
+    `${__name} [source] [default_file]`,
+    `merge n files`,
     yargs =>
       yargs
         .positional('source', {
@@ -59,6 +61,9 @@ export default function (yargs, consola) {
       if (argv.output) {
         o = resolve(argv.output)
       }
+      consola.debug('source', s)
+      consola.debug('default_file', d)
+      consola.debug('output', o)
 
       if (!fs.existsSync(s)) {
         consola.error('source not found')
