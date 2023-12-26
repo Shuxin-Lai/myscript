@@ -1,61 +1,37 @@
-#!/usr/bin/env node
-
+import { getContext, resolve } from '../utils/core.mjs'
+import fs from 'fs'
+import path from 'path'
+import { globSync } from 'glob'
+import sharp from 'sharp'
+import { promisify } from 'util'
 import chalk from 'chalk'
 
-import { createRequire } from 'module'
-
-const require = createRequire(import.meta.url)
+const { __name, require } = getContext(import.meta.url)
 
 const hr = require('@tsmx/human-readable')
-const sharp = require('sharp')
-const path = require('path')
-const fs = require('fs')
-const { getArgv } = require('../utils/parse_argv.mjs')
-const { globSync } = require('glob')
-const { promisify } = require('util')
 const sizeOf = promisify(require('image-size'))
-
 const pattern = '**/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}'
 
-const argv = getArgv({
-  s: _argv => ({
-    name: 'source',
-    defaultValue: _argv._[0],
-  }),
-  d: 'destination',
-  q: {
-    name: 'quality',
-    defaultValue: 100,
-  },
-  t: {
-    name: 'type',
-    defaultValue: 'webp',
-  },
-  r: {
-    name: 'replace',
-    defaultValue: true,
-  },
-})
+function prepare(argv) {
+  argv.__values = argv.__values || {
+    ...argv,
+  }
+  let sourcePath = argv.source
 
-function printHelp() {
-  console.log('mysharp [SOURCE] -d DESTINATION -q QUALITY -t TYPE')
-}
-
-function checkAndNormalizePath() {
-  const source = argv.__values.s
-  let sourcePath = source
   try {
-    sourcePath = path.resolve(source)
+    sourcePath = resolve(sourcePath)
     argv.__values.s = argv.__values.source = sourcePath
   } catch (err) {
-    throw new Error(`Invalid source path: ${source}`)
+    const msg = `Invalid source path: ${sourcePath}`
+    throw new Error(msg)
   }
 
   if (!fs.existsSync(sourcePath)) {
-    throw new Error(`Source path not exists: ${sourcePath}`)
+    const msg = `Invalid source path: ${sourcePath}`
+    throw new Error(msg)
   }
 
-  let destination = argv.__values.d
+  let destination = argv.__values.target
   if (!destination) {
     destination = path.join(sourcePath, './output')
 
@@ -66,7 +42,7 @@ function checkAndNormalizePath() {
   argv.__values.tmpFiles = []
 }
 
-function getFileList() {
+function getFileList(argv) {
   const source = argv.__values.s
   const fileList = globSync(path.join(source, pattern), {
     ignore: [
@@ -80,8 +56,8 @@ function getFileList() {
   argv.__values.fileList = fileList
 }
 
-async function transformOne(file) {
-  const type = argv.__values.t
+async function transformOne(argv, file) {
+  const type = argv.__values.type
   if (!fs.existsSync(argv.__values.tmp)) {
     fs.mkdirSync(argv.__values.tmp)
   }
@@ -115,8 +91,10 @@ async function transformOne(file) {
     dest: dest,
     file: file,
   })
+  const targetFile = path.join(argv.__values.d, `${name}.${type}`)
+
   print(
-    `${file} => ${dest} [${chalk.green(
+    `${file} => ${targetFile} [${chalk.green(
       hr.fromBytes(iStat.size)
     )} => ${chalk.cyan(hr.fromBytes(oStat.size))}] ${chalk[
       percent < 0 ? 'red' : 'blueBright'
@@ -124,7 +102,21 @@ async function transformOne(file) {
   )
 }
 
-async function resizeOne(item) {
+async function transform(argv) {
+  const fileList = argv.__values.fileList
+
+  const promises = fileList.map(file => transformOne(argv, file))
+  await Promise.all(promises)
+}
+
+async function resize(argv) {
+  const files = argv.__values.tmp3x
+  const promises = files.map(file => resizeOne(argv, file))
+
+  await Promise.all(promises)
+}
+
+async function resizeOne(argv, item) {
   const { type } = argv.__values
   const { dest: file, name } = item
   const { width, height } = await sizeOf(file)
@@ -159,24 +151,7 @@ async function resizeOne(item) {
   })
 }
 
-async function resize() {
-  const files = argv.__values.tmp3x
-  const promises = files.map(file => resizeOne(file))
-
-  await Promise.all(promises)
-}
-
-async function transform() {
-  const fileList = argv.__values.fileList
-  const destination = argv.__values.d
-  const quality = argv.__values.q
-  const type = argv.__values.t
-
-  const promises = fileList.map(file => transformOne(file))
-  await Promise.all(promises)
-}
-
-function move() {
+function move(argv) {
   const { tmpFiles, destination } = argv.__values
   if (!fs.existsSync(destination)) {
     fs.mkdirSync(destination)
@@ -202,28 +177,55 @@ function move() {
   })
 }
 
-async function main() {
-  if (argv.__values.h) {
-    printHelp()
-    return
-  }
-
-  if (!argv.__values.s) {
-    printHelp()
-    return
-  }
-
-  try {
-    checkAndNormalizePath()
-    getFileList()
-    await transform()
-    await resize()
-    await move()
-  } finally {
-    if (fs.existsSync(argv.__values.tmp)) {
-      fs.rmSync(argv.__values.tmp, { recursive: true })
+/**
+ * @param {import('yargs').Argv} yargs
+ * @param {import('consola').Consola} consola
+ */
+export default function (yargs, consola) {
+  return yargs.command(
+    `${__name} [source] [target]`,
+    'sharp utils',
+    yargs =>
+      yargs
+        .positional('source', {
+          alias: 's',
+          type: 'string',
+        })
+        .positional('target', {
+          alias: 't',
+          type: 'string',
+        })
+        .option('type', {
+          alias: 'type',
+          type: 'string',
+          default: 'webp',
+          description: 'type',
+        })
+        .option('quality', {
+          alias: 'q',
+          type: 'number',
+          default: 100,
+          description: 'quality',
+        })
+        .option('replace', {
+          alias: 'r',
+          type: 'boolean',
+          default: true,
+          description: 'replace',
+        })
+        .demandOption(['source']),
+    async argv => {
+      try {
+        prepare(argv)
+        getFileList(argv)
+        await transform(argv)
+        await resize(argv)
+        await move(argv)
+      } finally {
+        if (fs.existsSync(argv.__values.tmp)) {
+          fs.rmSync(argv.__values.tmp, { recursive: true })
+        }
+      }
     }
-  }
+  )
 }
-
-main()

@@ -1,12 +1,4 @@
 {
-  "init": {
-    "prefix": "init",
-    "body": [
-      "#!/usr/bin/env node",
-      "",
-      "const { getArgv } = require('../utils/parse_argv')"
-    ]
-  },
   "crequire": {
     "prefix": "crequire",
     "body": [

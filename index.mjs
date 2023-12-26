@@ -8,7 +8,7 @@ import { getContext } from './utils/core.mjs'
 const argv = yargs(hideBin(process.argv)).argv
 const { require, __dirname } = getContext(import.meta.url)
 
-const commands = globSync(path.resolve(__dirname, './commands_v2/*.mjs'))
+const commands = globSync(path.resolve(__dirname, './commands/*.mjs'))
 
 const pkg = require('./package.json')
 
