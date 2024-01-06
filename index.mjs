@@ -32,6 +32,11 @@ async function main() {
     _yarns = commandFn(_yarns, consola)
   }
 
+  // show all commands when no command is specified
+  if (!process.argv.slice(2).length) {
+    _yarns.showHelp()
+  }
+
   _yarns.parse()
 }
 

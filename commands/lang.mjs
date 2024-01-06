@@ -61,6 +61,11 @@ async function handle(argv, consola) {
     spinner.stop()
     const text = res.output.text
     console.log(text)
+
+    if (!argv.output) {
+      return
+    }
+
     let history = []
 
     if (argv.output && fs.existsSync(argv.output)) {
@@ -95,6 +100,12 @@ export default function (yargs, consola) {
         .positional('input', {
           alias: 'i',
           type: 'string',
+        })
+        .option('s_language', {
+          alias: 'sl',
+          type: 'string',
+          default: 'Chinese',
+          description: 'system language',
         })
         .option('role', {
           alias: 'r',
