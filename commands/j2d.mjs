@@ -65,7 +65,7 @@ export default function (yargs, consola) {
 
       const jobs = files.map(file => {
         const basename = path.basename(file, path.extname(file))
-        const name = startCase(camelCase(basename)) + 'Model'
+        const name = startCase(camelCase(basename))
         const targetFile = resolve(argv.dest, snakeCase(name) + '.dart')
         consola.debug(`${file} -> ${targetFile}`)
         return quicktype.main([
@@ -73,6 +73,7 @@ export default function (yargs, consola) {
           '--lang',
           'dart',
           '--null-safety',
+          '--no-enums',
           '--coders-in-class',
           '--all-properties-optional',
           '--top-level',

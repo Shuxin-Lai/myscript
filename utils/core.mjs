@@ -21,6 +21,13 @@ export function countList(list, keys = ['id', 'name']) {
 }
 
 export function resolve(...paths) {
+  if (paths.length == 1) {
+    const p = paths[0]
+    if (p.startsWith('.')) {
+      return path.resolve(process.cwd(), p)
+    }
+  }
+
   paths = paths.map(p => {
     if (p.startsWith('~')) {
       return path.resolve(userhome(), `.${p.slice(1)}`)

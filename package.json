@@ -33,6 +33,7 @@
     "ora": "^8.0.1",
     "pngquant-bin": "6.0.1",
     "quicktype": "^23.0.80",
+    "random": "^4.1.0",
     "root-check": "^2.0.0",
     "sharp": "^0.32.6",
     "sort-object": "^3.0.3",
