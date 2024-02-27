@@ -23,7 +23,13 @@ export function countList(list, keys = ['id', 'name']) {
 export function resolve(...paths) {
   if (paths.length == 1) {
     const p = paths[0]
-    if (p.startsWith('.')) {
+    // starts with ., a-z, A-Z, 0-9
+    if (
+      isString(p) &&
+      p.match(/^[a-zA-Z0-9]/) &&
+      !p.startsWith('/') &&
+      !p.startsWith('\\')
+    ) {
       return path.resolve(process.cwd(), p)
     }
   }
