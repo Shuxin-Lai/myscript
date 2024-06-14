@@ -3,7 +3,7 @@ import fs from 'fs'
 import { getContext, resolve } from '../utils/core.mjs'
 import path from 'path'
 import { globSync } from 'glob'
-import { merge } from 'lodash-es'
+import { merge, cloneDeep } from 'lodash-es'
 
 const { __name } = getContext(import.meta.url)
 
@@ -15,7 +15,7 @@ function handle(sourceDir, outputDir, defaultFile) {
   for (const file of targetFiles) {
     const name = path.basename(file)
     const content = JSON.parse(fs.readFileSync(file, 'utf-8'))
-    const newContent = merge(defaultContent, content)
+    const newContent = merge(cloneDeep(defaultContent), cloneDeep(content))
     fs.writeFileSync(
       path.resolve(outputDir, name),
       JSON.stringify(newContent, null, 2)

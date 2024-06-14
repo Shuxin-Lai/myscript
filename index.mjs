@@ -37,6 +37,15 @@ async function main() {
     _yarns.showHelp()
   }
 
+  _yarns.command({
+    command: '*',
+    handler() {
+      console.log('unknown command')
+      console.log('---------------')
+      _yarns.showHelp()
+    },
+  })
+
   _yarns.parse()
 }
 

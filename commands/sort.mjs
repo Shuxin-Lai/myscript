@@ -8,7 +8,7 @@ const { __name, require } = getContext(import.meta.url)
 
 function sortOne(file, targetDir) {
   const json = require(file)
-  console.log('json: ', json)
+  // console.log('json: ', json)
   const res = sortObj(json)
   const basename = path.basename(file)
 

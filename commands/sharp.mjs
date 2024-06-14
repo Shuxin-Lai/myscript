@@ -34,9 +34,9 @@ function prepare(argv) {
   let destination = argv.__values.target
   if (!destination) {
     destination = path.join(sourcePath, './output')
-
-    argv.__values.d = argv.__values.destination = destination
   }
+  argv.__values.dest = argv.__values.destination = destination
+
   argv.__values.tmp = path.join(sourcePath, './__mysharp_tmp__')
   argv.__values.tmp3x = []
   argv.__values.tmpFiles = []
@@ -91,7 +91,7 @@ async function transformOne(argv, file) {
     dest: dest,
     file: file,
   })
-  const targetFile = path.join(argv.__values.d, `${name}.${type}`)
+  const targetFile = path.join(argv.__values.dest, `${name}.${type}`)
 
   print(
     `${file} => ${targetFile} [${chalk.green(
