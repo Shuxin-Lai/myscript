@@ -65,3 +65,26 @@ export function getContext(url) {
 export function sleep(ms = 16) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
+
+export function flattenObject(obj, prefix = '') {
+  const isArr = Array.isArray(obj)
+  if (isArr) {
+    return obj.map(item => flattenObject(item, prefix))
+  }
+
+  let result = {}
+
+  for (let key in obj) {
+    if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
+      let flattenedObj = flattenObject(obj[key], prefix + key + '.')
+      result = { ...result, ...flattenedObj }
+    } else if (Array.isArray(obj[key])) {
+      let flattenedObj = flattenObject(obj[key], prefix + key + '.')
+      result = { ...result, ...flattenedObj }
+    } else {
+      result[prefix + key] = obj[key]
+    }
+  }
+
+  return result
+}
